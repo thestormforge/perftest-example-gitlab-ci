@@ -115,7 +115,7 @@ deploy_production:
   stage: production:deploy
   only:
     refs:
-      - master
+      - main
   except: ["schedules"]
   resource_group: production
   script:
@@ -127,7 +127,7 @@ sf:loadtest_production:
   stage: production:test
   only:
     refs:
-      - master
+      - main
   extends: .stormforge
   resource_group: production
   script:
