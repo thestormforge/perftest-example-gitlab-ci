@@ -2,7 +2,6 @@ image: golang:latest
 
 variables:
   # Please edit to your GitLab project
-  REPO_NAME: gitlab.com/stormforger/ci-playground
   SF_DS_PREFIX: "perftest-example-gitlab-ci"
   TARGET_ENV_STAGING: "staging"
   TARGET_ENV_PRODUCTION: "production"
