@@ -5,6 +5,8 @@ variables:
   SF_DS_PREFIX: "perftest-example-gitlab-ci"
   TARGET_ENV_STAGING: "staging"
   TARGET_ENV_PRODUCTION: "production"
+  # Remove when v3 CLI is shipped with perftest commands enabled by default
+  ENABLE_PERFTEST_PREVIEW_COMMANDS: "true"
 
 stages:
   - build # build the app

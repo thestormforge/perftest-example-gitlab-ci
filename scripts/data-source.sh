@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
 # Fetch data from target environment (e.g. staging or prod) and export as CSV file for usage in test-run.
 # For this example we just write some example data.
