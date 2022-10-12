@@ -16,10 +16,11 @@ stages:
 
 # ==== templates ====
 
-.forge:
+.stormforge:
   image:
-    name: ubuntu:latest
+    name: registry.stormforge.io/library/stormforge-cli:latest
     entrypoint: [""]
+
 # Troubleshooting
 .busybox:
   image:
@@ -59,9 +60,10 @@ regular:ping:
 
 sf:ping:
   stage: build
-  extends: .forge
+  extends: .stormforge
   script:
-    - ./stormforge ping # check that we can reach the API and our token is correct
+    - stormforge version
+    - stormforge ping # check that we can reach the API and our token is correct
 
 # ===== staging:deploy ====
 
@@ -78,16 +80,16 @@ sf:loadtest_staging:
   stage: staging:test
   except: ["schedules"]
   resource_group: staging
-  extends: .forge
+  extends: .stormforge
   script:
     - ./scripts/data-source.sh "${TARGET_ENV}"
     - |
-      ./stormforge create data-source \
+      stormforge create data-source \
         --from-file *.csv \
         --name-prefix-path="${SF_DS_PREFIX}/${TARGET_ENV}/" \
         --auto-field-names
     - |
-      ./stormforge create test-run --test-case "${TESTCASE}" --from-file="loadtest/loadtest.mjs" \
+      stormforge create test-run --test-case "${TESTCASE}" --from-file="loadtest/loadtest.mjs" \
         --define ENV=\"${TARGET_ENV}\" \
         --title="${TITLE}" --notes="${NOTES}" \
         --label="git-ref=${CI_COMMIT_REF_NAME}" \
@@ -125,17 +127,17 @@ sf:loadtest_production:
   only:
     refs:
       - master
-  extends: .forge
+  extends: .stormforge
   resource_group: production
   script:
     - ./scripts/data-source.sh "${TARGET_ENV}"
     - |
-      ./stormforge create data-source \
+      stormforge create data-source \
       --from-file *.csv \
       --name-prefix-path="${SF_DS_PREFIX}/${TARGET_ENV}/" \
       --auto-field-names
     - |
-      ./stormforge create test-run --test-case "${TESTCASE}" --from-file="loadtest/loadtest.mjs" \
+      stormforge create test-run --test-case "${TESTCASE}" --from-file="loadtest/loadtest.mjs" \
         --define ENV=\"${TARGET_ENV}\" \
         --title="${TITLE}" --notes="${NOTES}" \
         --label="git-ref=${CI_COMMIT_REF_NAME}" \
